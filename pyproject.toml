@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "1c-buddy-mcp"
+version = "0.1.0"
+description = "Standalone MCP server for 1C.ai"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "AGPL-3.0-only"
+authors = [{ name = "VVi3ard" }]
+keywords = ["1c", "mcp", "1c-ai", "codex"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: GNU Affero General Public License v3",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+  "httpx>=0.27,<1",
+  "mcp>=1.10,<2",
+  "pydantic>=2.6,<3",
+  "pydantic-settings>=2.2,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<10",
+  "pytest-asyncio>=0.23,<2",
+]
+
+[project.scripts]
+onec-buddy-mcp = "onec_buddy_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/VVi3ard/1c-buddy-mcp"
+Source = "https://github.com/VVi3ard/1c-buddy-mcp"
+Upstream = "https://github.com/ROCTUP/1c-buddy"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/onec_buddy_mcp"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "live: uses the real 1C.ai API and requires explicit opt-in",
+]
