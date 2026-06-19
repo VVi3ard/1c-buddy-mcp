@@ -10,6 +10,7 @@ from mcp.server.fastmcp import FastMCP
 from .client import OneCAIClient
 from .config import get_settings
 from .errors import UpstreamError
+from .limitations import append_tool_limitations
 from .service import OneCToolService
 
 logger = logging.getLogger(__name__)
@@ -28,10 +29,16 @@ async def _invoke(method: str, **kwargs: Any) -> str:
     """Create an isolated upstream client for one MCP invocation."""
 
     try:
-        async with OneCAIClient(get_settings()) as client:
+        settings = get_settings()
+        async with OneCAIClient(settings) as client:
             service = OneCToolService(client)
             operation = getattr(service, method)
-            return await operation(**kwargs)
+            response = await operation(**kwargs)
+            return append_tool_limitations(
+                method,
+                response,
+                enabled=settings.ONEC_AI_INCLUDE_LIMITATIONS,
+            )
     except (ValueError, UpstreamError) as exc:
         return f"Ошибка: {exc}"
     except Exception:

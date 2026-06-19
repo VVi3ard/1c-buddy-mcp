@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     MCP_TOOL_INPUT_MIN_LENGTH: int = Field(default=4, ge=0)
     MCP_TOOL_INPUT_MAX_LENGTH: int = Field(default=100000, gt=0)
     MCP_TOOL_CALL_MODE: Literal["direct", "standard"] = "direct"
+    ONEC_AI_INCLUDE_LIMITATIONS: bool = True
 
     @field_validator("ONEC_AI_BASE_URL")
     @classmethod
